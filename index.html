@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Selfbot Manager</title>
+    <meta name="description" content="A modern and sleek Discord account manager with a web interface. Manage your Discord account, perform raids, manage webhooks, and much more..">
+    <meta name="keywords" content="Discord, Selfbot, Manager, Raid, Webhook, Token">
+    <meta name="author" content="Discord Account Manager">
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <meta property="og:title" content="Discord Selfbot Manager">
+    <meta property="og:description" content="A modern and sleek Discord account manager with a web interface. Manage your Discord account, perform raids, manage webhooks, and much more..">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Discord Selfbot Manager">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Discord Selfbot Manager">
+    <meta name="twitter:description" content="A modern and sleek Discord account manager with a web interface. Manage your Discord account, perform raids, manage webhooks, and much more..">
+    <meta name="twitter:image" content="logo.png">
+    
+    <meta property="og:url" content="">
+    <meta name="theme-color" content="#4169ff">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'" />
+            </div>
+            <h1>Discord Selfbot Manager</h1>
+            <p class="warning">we are not responsible for any inappropriate work done.</p>
+            <div class="login-box">
+                <input type="password" id="token-input" placeholder="Enter your Discord token" />
+                <button onclick="auth.verifyToken()">Log in</button>
+            </div>
+            <div id="login-error" class="error"></div>
+        </div>
+    </div>
+
+    <div id="warning-screen" class="screen">
+        <div class="container">
+            <h1>⚠️  IMPORTANT</h1>
+            <div class="warning-box">
+                <h2>Risks related to selfbots :</h2>
+                <ul>
+                    <li>❌ Violation of Discord's Terms of Service</li>
+                    <li>❌ may result in permanent bans </li>
+                    <li>❌ Loss of all your servers, friends, and messages</li>
+                    <li>❌ No recourse possible in case of ban</li>
+                    <li>❌ Irreversible actions (deleting friends, messages, etc.)</li>
+                </ul>
+                <p class="user-info">Logged in as: <span id="user-tag"></span></p>
+                <div class="avatar-container">
+                    <img id="user-avatar" src="" alt="Avatar" />
+                </div>
+            </div>
+            <div class="accept-box">
+                <label>
+                    <input type="checkbox" id="accept-risks" />
+                    I understand and accept.
+                </label>
+                <button onclick="auth.acceptRisks()" id="accept-btn" disabled>Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen">
+        <div class="header">
+            <div class="header-left">
+                <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'" />
+                <div class="user-profile">
+                    <img id="dash-avatar" src="" alt="Avatar" />
+                    <span id="dash-username"></span>
+                </div>
+            </div>
+            <button onclick="auth.logout()" class="logout-btn">Log out</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="ui.switchTab('info')">📊 Info</button>
+            <button class="tab-btn" onclick="ui.switchTab('utiles')">🛠️ Utilities</button>
+            <button class="tab-btn" onclick="ui.switchTab('tools')">⚙️ Tools</button>
+            <button class="tab-btn" onclick="ui.switchTab('token')">🔑 Token</button>
+            <button class="tab-btn" onclick="ui.switchTab('webhook')">🔗 Webhook</button>
+            <button class="tab-btn" onclick="ui.switchTab('raid')">💥 Raid</button>
+        </div>
+
+        <div class="tab-content active" id="tab-info">
+            <div class="info-section">
+                <h2>🔍 Information Search </h2>
+                <div class="input-group">
+                    <input type="text" id="info-search-id" placeholder="ID or invitation code" />
+                    <button onclick="infoModule.getUserInfo()">👤 User</button>
+                    <button onclick="infoModule.getServerInfo()">🏠 Server</button>
+                    <button onclick="infoModule.getInviteInfo()">📨 Invitation</button>
+                </div>
+            </div>
+            <div id="info-display" class="info-display"></div>
+        </div>
+
+        <div class="tab-content" id="tab-utiles">
+            <div class="section-grid">
+                <div class="section">
+                    <h2>👥 Friend Management </h2>
+                    <button onclick="friendsModule.deleteAllFriends()" class="danger-btn">Delete all friends</button>
+                    <button onclick="friendsModule.showMessageModal()">Send a message to everyone</button>
+                </div>
+
+                <div class="section">
+                    <h2>🔇 Server Management </h2>
+                    <button onclick="serverModule.muteAllServers()">mute all servers </button>
+                    <button onclick="serverModule.unmuteAllServers()">Send a message to every channel</button>
+                </div>
+
+                <div class="section">
+                    <h2>🎖️ HypeSquad</h2>
+                    <select id="hypesquad-select">
+                        <option value="0">None</option>
+                        <option value="1">Bravery</option>
+                        <option value="2">Brilliance</option>
+                        <option value="3">Ballance</option>
+                    </select>
+                    <button onclick="utilsModule.changeHypesquad()">Change</button>
+                </div>
+
+                <div class="section">
+                    <h2>🏷️ Clan Tag</h2>
+                    <button onclick="utilsModule.showClanModal()">Edit my clan</button>
+                </div>
+
+                <div class="section">
+                    <h2>🔐 ID to Token</h2>
+                    <button onclick="utilsModule.showIdTokenModal()">Encode an ID</button>
+                </div>
+
+                <div class="section">
+                    <h2>💥 Voice DDoS</h2>
+                    <button onclick="voiceModule.showDdosModal()" class="danger-btn">Launch DM/Group DDoS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-tools">
+            <div class="section-grid">
+                <div class="section">
+                    <h2>💬 Message Management </h2>
+                    <input type="text" id="channel-id" placeholder="Channel ID" />
+                    <button onclick="messagesModule.deleteAllMessages()">delete all messages</button>
+                    <button onclick="messagesModule.saveMessages()">Save as HTML</button>
+                </div>
+
+                <div class="section">
+                    <h2>👥 Friendly Tools</h2>
+                    <button onclick="toolsModule.createFriendLink()">🔗 Create a friend link</button>
+                </div>
+
+                <div class="section">
+                    <h2>🗑️ Cleaning</h2>
+                    <button onclick="toolsModule.nukeDMs()" class="danger-btn">Close all DMs</button>
+                    <button onclick="toolsModule.nukeBotDMs()" class="danger-btn">close all bot DMs</button>
+                    <button onclick="toolsModule.nukeGroups()" class="danger-btn">Leave all groups</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-token">
+            <div class="section-grid">
+                <div class="section">
+                    <h2>🔑 Token Verification</h2>
+                    <button onclick="tokenModule.showCheckerModal()">Verify a token</button>
+                    <button onclick="tokenModule.showInfoModal()">Token information</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-webhook">
+            <div class="section-grid">
+                <div class="section">
+                    <h2>✅ Verification</h2>
+                    <button onclick="webhookModule.showCheckerModal()">Verify a webhook</button>
+                    <button onclick="webhookModule.showInfoModal()">Webhook information</button>
+                </div>
+
+                <div class="section">
+                    <h2>🗑️ Deletion</h2>
+                    <button onclick="webhookModule.showDeleteModal()" class="danger-btn">Delete a webhook</button>
+                    <button onclick="webhookModule.showDeleteAllModal()" class="danger-btn">Delete all (channel)</button>
+                </div>
+
+                <div class="section">
+                    <h2>📢 Spam</h2>
+                    <button onclick="webhookModule.showSpammerModal()" class="danger-btn">Spam a webhook</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-raid">
+            <div class="raid-warning">
+                <h2>⚠️ DANGEROUS ZONE</h2>
+                <p>These actions are destructive and irreversible. Use at your own risk.</p>
+            </div>
+            
+            <div class="section-grid">
+                <div class="section">
+                    <h2>💥 Raid Actions</h2>
+                    <input type="text" id="raid-server-id" placeholder="Server ID" />
+                    <button onclick="raidModule.showDefaceModal()" class="danger-btn">🔥 Deface</button>
+                    <button onclick="raidModule.showWebhookSpamModal()" class="danger-btn">📢 Webhook Spam</button>
+                    <button onclick="raidModule.spamChannels()" class="danger-btn">📝 Spam Channels</button>
+                    <button onclick="raidModule.spamRoles()" class="danger-btn">🎨 Spam Roles</button>
+                </div>
+
+                <div class="section">
+                    <h2>🗑️ Destruction</h2>
+                    <input type="text" id="raid-server-id-2" placeholder="Server ID" />
+                    <button onclick="raidModule.deleteChannels()" class="danger-btn">Delete channels</button>
+                    <button onclick="raidModule.deleteRoles()" class="danger-btn">Delete roles</button>
+                    <button onclick="raidModule.banAll()" class="danger-btn">Ban all</button>
+                    <button onclick="raidModule.kickAll()" class="danger-btn">Kick all</button>
+                    <button onclick="raidModule.showPruneModal()" class="danger-btn">Prune inactive</button>
+                </div>
+
+                <div class="section">
+                    <h2>🔄 Server Crash</h2>
+                    <button onclick="raidModule.showRoleUpModal()" class="danger-btn">Role Up Crash</button>
+                </div>
+
+                <div class="section nuke-section">
+                    <h2>☢️ COMPLETE NUKE</h2>
+                    <input type="text" id="raid-server-id-3" placeholder="server id" />
+                    <button onclick="raidModule.nuke()" class="nuke-btn">☢️ Destroy Everything</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="output" class="output"></div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="ui.closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/htmlGenerator.js"></script>
+    <script src="js/info.js"></script>
+    <script src="js/friends.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/server.js"></script>
+    <script src="js/utils-module.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/token.js"></script>
+    <script src="js/webhook.js"></script>
+    <script src="js/raid.js"></script>
+</body>
+</html>
