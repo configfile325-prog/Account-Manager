@@ -13,11 +13,15 @@ const friendsModule = {
             
             for (const friend of friends) {
                 try {
-                    await discordFetch(`/users/@me/relationships/${friend.id}`, { method: 'DELETE' });
-                    log(`✓ Friend deleted: ${friend.user.username}#${friend.user.discriminator}`, 'success');
+                    // Fix: Ensure we use the correct ID path
+                    const friendId = friend.id || (friend.user ? friend.user.id : null);
+                    if (!friendId) continue;
+
+                    await discordFetch(`/users/@me/relationships/${friendId}`, { method: 'DELETE' });
+                    log(`✓ Friend deleted: ${friend.user?.username || 'Unknown'}`, 'success');
                     await sleep(CONFIG.DELAYS.NORMAL);
                 } catch (error) {
-                    log(`✗ Error for ${friend.user.username}: ${error.message}`, 'error');
+                    log(`✗ Error for ${friend.user?.username || 'Unknown'}: ${error.message}`, 'error');
                 }
             }
             
@@ -36,7 +40,10 @@ const friendsModule = {
     },
 
     async sendMessageToAll() {
-        const message = document.getElementById('friend-message').value.trim();
+        const messageInput = document.getElementById('friend-message');
+        if (!messageInput) return;
+
+        const message = messageInput.value.trim();
         if (!message) {
             alert('Please enter a message');
             return;
@@ -53,20 +60,39 @@ const friendsModule = {
             
             for (const friend of friends) {
                 try {
+                    // Fix: Reliable ID check to prevent "Invalid JSON" on body
+                    const friendId = friend.id || (friend.user ? friend.user.id : null);
+                    
+                    if (!friendId) {
+                        log(`✗ Missing ID for a friend entry`, 'error');
+                        continue;
+                    }
+
+                    // Step 1: Create or Get DM Channel
                     const dm = await discordFetch('/users/@me/channels', {
                         method: 'POST',
-                        body: JSON.stringify({ recipient_id: friend.id })
+                        // Fix: Explicitly structured JSON body
+                        body: JSON.stringify({ recipient_id: friendId })
                     });
                     
+                    if (!dm || !dm.id) {
+                        throw new Error('Could not create DM channel');
+                    }
+
+                    // Step 2: Send Message
                     await discordFetch(`/channels/${dm.id}/messages`, {
                         method: 'POST',
-                        body: JSON.stringify({ content: message })
+                        // Fix: Explicitly structured JSON body
+                        body: JSON.stringify({ 
+                            content: message,
+                            tts: false 
+                        })
                     });
                     
-                    log(`✓ Message sent to ${friend.user.username}#${friend.user.discriminator}`, 'success');
+                    log(`✓ Message sent to ${friend.user?.username || friendId}`, 'success');
                     await sleep(CONFIG.DELAYS.VERY_SLOW);
                 } catch (error) {
-                    log(`✗ Error for ${friend.user.username}: ${error.message}`, 'error');
+                    log(`✗ Error for ${friend.user?.username || 'Unknown'}: ${error.message}`, 'error');
                 }
             }
             
@@ -76,3 +102,4 @@ const friendsModule = {
         }
     }
 };
+
