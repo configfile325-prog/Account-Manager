@@ -56,7 +56,7 @@
                     <li>❌ No recourse possible in case of ban</li>
                     <li>❌ Irreversible actions (deleting friends, messages, etc.)</li>
                 </ul>
-                <p class="user-info">Connecté en tant que: <span id="user-tag"></span></p>
+                <p class="user-info">Logged in as: <span id="user-tag"></span></p>
                 <div class="avatar-container">
                     <img id="user-avatar" src="" alt="Avatar" />
                 </div>
@@ -64,7 +64,7 @@
             <div class="accept-box">
                 <label>
                     <input type="checkbox" id="accept-risks" />
-                    Je comprends et j'accepte tous les risques
+                    I understand and accept.
                 </label>
                 <button onclick="auth.acceptRisks()" id="accept-btn" disabled>Continuer</button>
             </div>
@@ -80,7 +80,7 @@
                     <span id="dash-username"></span>
                 </div>
             </div>
-            <button onclick="auth.logout()" class="logout-btn">Déconnexion</button>
+            <button onclick="auth.logout()" class="logout-btn">Log out</button>
         </div>
 
         <div class="tabs">
@@ -94,11 +94,11 @@
 
         <div class="tab-content active" id="tab-info">
             <div class="info-section">
-                <h2>🔍 Recherche d'informations</h2>
+                <h2>🔍 Information Search </h2>
                 <div class="input-group">
                     <input type="text" id="info-search-id" placeholder="ID ou code d'invitation" />
-                    <button onclick="infoModule.getUserInfo()">👤 Utilisateur</button>
-                    <button onclick="infoModule.getServerInfo()">🏠 Serveur</button>
+                    <button onclick="infoModule.getUserInfo()">👤 User</button>
+                    <button onclick="infoModule.getServerInfo()">🏠 Server</button>
                     <button onclick="infoModule.getInviteInfo()">📨 Invitation</button>
                 </div>
             </div>
@@ -108,21 +108,21 @@
         <div class="tab-content" id="tab-utiles">
             <div class="section-grid">
                 <div class="section">
-                    <h2>👥 Gestion des amis</h2>
-                    <button onclick="friendsModule.deleteAllFriends()" class="danger-btn">Supprimer tous les amis</button>
-                    <button onclick="friendsModule.showMessageModal()">Envoyer un message à tous</button>
+                    <h2>👥 Friend Management </h2>
+                    <button onclick="friendsModule.deleteAllFriends()" class="danger-btn">Delete all friends</button>
+                    <button onclick="friendsModule.showMessageModal()">Send a message to everyone</button>
                 </div>
 
                 <div class="section">
-                    <h2>🔇 Gestion des serveurs</h2>
-                    <button onclick="serverModule.muteAllServers()">Mute tous les serveurs</button>
-                    <button onclick="serverModule.unmuteAllServers()">Unmute tous les serveurs</button>
+                    <h2>🔇 Server Management </h2>
+                    <button onclick="serverModule.muteAllServers()">mute all servers </button>
+                    <button onclick="serverModule.unmuteAllServers()">Send a message to every channel</button>
                 </div>
 
                 <div class="section">
                     <h2>🎖️ HypeSquad</h2>
                     <select id="hypesquad-select">
-                        <option value="0">Aucune</option>
+                        <option value="0">None</option>
                         <option value="1">Bravery</option>
                         <option value="2">Brilliance</option>
                         <option value="3">Ballance</option>
@@ -150,22 +150,22 @@
         <div class="tab-content" id="tab-tools">
             <div class="section-grid">
                 <div class="section">
-                    <h2>💬 Gestion des messages</h2>
+                    <h2>💬 Message Management </h2>
                     <input type="text" id="channel-id" placeholder="ID du salon" />
-                    <button onclick="messagesModule.deleteAllMessages()">Supprimer mes messages</button>
-                    <button onclick="messagesModule.saveMessages()">Sauvegarder en HTML</button>
+                    <button onclick="messagesModule.deleteAllMessages()">delete all messages</button>
+                    <button onclick="messagesModule.saveMessages()">Save as HTML</button>
                 </div>
 
                 <div class="section">
-                    <h2>👥 Outils Amis</h2>
-                    <button onclick="toolsModule.createFriendLink()">🔗 Créer lien d'ami</button>
+                    <h2>👥 Friendly Tools</h2>
+                    <button onclick="toolsModule.createFriendLink()">🔗 Create a friend link</button>
                 </div>
 
                 <div class="section">
-                    <h2>🗑️ Nettoyage</h2>
-                    <button onclick="toolsModule.nukeDMs()" class="danger-btn">Fermer tous les DMs</button>
-                    <button onclick="toolsModule.nukeBotDMs()" class="danger-btn">Fermer DMs de bots</button>
-                    <button onclick="toolsModule.nukeGroups()" class="danger-btn">Quitter tous les groupes</button>
+                    <h2>🗑️ Cleaning</h2>
+                    <button onclick="toolsModule.nukeDMs()" class="danger-btn">Close all DMs</button>
+                    <button onclick="toolsModule.nukeBotDMs()" class="danger-btn">close all bot DMs</button>
+                    <button onclick="toolsModule.nukeGroups()" class="danger-btn">Leave all groups</button>
                 </div>
             </div>
         </div>
@@ -233,9 +233,9 @@
                 </div>
 
                 <div class="section nuke-section">
-                    <h2>☢️ NUKE COMPLET</h2>
-                    <input type="text" id="raid-server-id-3" placeholder="ID du serveur" />
-                    <button onclick="raidModule.nuke()" class="nuke-btn">☢️ DÉTRUIRE TOUT</button>
+                    <h2>☢️ NUKE COMPLETE</h2>
+                    <input type="text" id="raid-server-id-3" placeholder="server id" />
+                    <button onclick="raidModule.nuke()" class="nuke-btn">☢️ Destroy Everything</button>
                 </div>
             </div>
         </div>
